@@ -132,8 +132,6 @@ void dmpDataReady() {
 }
 
 
-//Define Variables we'll be connecting to
-float Setpoint, Input, Output;
 
 
 // ================================================================
@@ -224,8 +222,8 @@ void setup() {
 }
 
 int power = 150;
-
-
+float scale = 4.977777; //256*motorpoles/360  arduino won't calculate this properly for some reason
+float Input = 0;
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
@@ -244,9 +242,9 @@ void loop() {
         // .
         // .
         // .
-        Input = (euler[0] * 180/M_PI)*(256*7/360);
-        pos = (int) Input;
-        //MoveMotorPosSpeed(1, pos, power);
+        Input = ((euler[0] * 180/M_PI)+180)*scale;
+        pos = (int) (Input);
+        MoveMotorPosSpeed(1, pos, power);
         //Serial.println("mainloop");
 
     }
@@ -281,7 +279,7 @@ void loop() {
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetEuler(euler, &q);
             //Serial.print("euler\t");
-            Serial.print(euler[0] * 180/M_PI);
+            Serial.print(euler[0] * 180/M_PI+180);
             Serial.print("\t");
             //Serial.print(euler[1] * 180/M_PI);
             //Serial.print("\t");
@@ -289,7 +287,7 @@ void loop() {
             //Serial.print("\t");
             Serial.print(Input);
             Serial.print("\t");
-            Serial.println(pos& 0xff);
+            Serial.println(pos & 0xff);
             
         #endif
 
@@ -307,7 +305,7 @@ void loop() {
         #endif
 
         // blink LED to indicate activity
-        blinkState = !blinkState;
-        digitalWrite(LED_PIN, blinkState);
+        //blinkState = !blinkState;
+        //digitalWrite(LED_PIN, blinkState);
     }
 }
