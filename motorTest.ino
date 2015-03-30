@@ -244,9 +244,9 @@ void loop() {
         // .
         // .
         // .
-        Input = (euler[0] * 180/M_PI)*2.5;
+        Input = (euler[0] * 180/M_PI)*(256*7/360);
         pos = (int) Input;
-        MoveMotorPosSpeed(1, pos, power);
+        //MoveMotorPosSpeed(1, pos, power);
         //Serial.println("mainloop");
 
     }
@@ -289,7 +289,7 @@ void loop() {
             //Serial.print("\t");
             Serial.print(Input);
             Serial.print("\t");
-            Serial.println(pos);
+            Serial.println(pos& 0xff);
             
         #endif
 
