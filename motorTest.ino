@@ -222,7 +222,7 @@ void setup() {
 }
 
 int power = 150;
-float scale = 4.977777; //256*motorpoles/360  arduino won't calculate this properly for some reason
+float scale = 256*6/(float)360; //something needs to be cast as float
 float Input = 0;
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
