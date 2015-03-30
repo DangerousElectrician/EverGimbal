@@ -309,77 +309,77 @@ bool fpvModeFreezeRoll = false;
 // rc alternate ACC time
 bool altModeAccTime = false;
 
-//*************************************
+////*************************************
+////
+////  IMU
+////
+////*************************************
+//enum axisDef {
+//  ROLL,
+//  PITCH,
+//  YAW
+//};
 //
-//  IMU
+//typedef struct fp_vector {
+//  float X;
+//  float Y;
+//  float Z;
+//} t_fp_vector_def;
 //
-//*************************************
-enum axisDef {
-  ROLL,
-  PITCH,
-  YAW
-};
-
-typedef struct fp_vector {
-  float X;
-  float Y;
-  float Z;
-} t_fp_vector_def;
-
-typedef union {
-  float   A[3];
-  t_fp_vector_def V;
-} t_fp_vector;
-
-
-
-//********************
-// sensor orientation
-//********************
-typedef struct sensorAxisDef {
-  char idx;
-  int  dir;
-} t_sensorAxisDef;
-
-typedef struct sensorOrientationDef {
-  t_sensorAxisDef Gyro[3];
-  t_sensorAxisDef Acc[3];
-} t_sensorOrientationDef;
-
-t_sensorOrientationDef sensorDef = { 
-    {{0, 1}, {1, 1}, {2, 1}},    // Gyro
-    {{0, 1}, {1, 1}, {2, 1}}     // Acc
-  };
-
-
-static float gyroScale=0;
-
-static int16_t gyroADC[3];
-static int16_t accADC[3];
-
-static t_fp_vector EstG;
-
-static float accLPF[3] = {0.0,0.0,0.0};
-static float accMag = 0;
-static bool disableAccGtest = false;
-
-static float AccComplFilterConst = 0;  // filter constant for complementary filter
-
-static int16_t acc_25deg = 25;      //** TODO: check
-
-static int32_t angle[2]    = {0,0};  // absolute angle inclination in multiple of 0.01 degree    180 deg = 18000
-
-static float angleOffsetRoll_f = 0;
-static float angleOffsetPitch_f = 0;
-
-static int32_t angleOffsetRoll = 0;
-static int32_t angleOffsetPitch = 0;
-
-
-// DEBUG only
-uint32_t stackTop = 0xffffffff;
-uint32_t stackBottom = 0;
-
-uint32_t heapTop = 0;
-uint32_t heapBottom = 0xffffffff;
+//typedef union {
+//  float   A[3];
+//  t_fp_vector_def V;
+//} t_fp_vector;
+//
+//
+//
+////********************
+//// sensor orientation
+////********************
+//typedef struct sensorAxisDef {
+//  char idx;
+//  int  dir;
+//} t_sensorAxisDef;
+//
+//typedef struct sensorOrientationDef {
+//  t_sensorAxisDef Gyro[3];
+//  t_sensorAxisDef Acc[3];
+//} t_sensorOrientationDef;
+//
+//t_sensorOrientationDef sensorDef = { 
+//    {{0, 1}, {1, 1}, {2, 1}},    // Gyro
+//    {{0, 1}, {1, 1}, {2, 1}}     // Acc
+//  };
+//
+//
+//static float gyroScale=0;
+//
+//static int16_t gyroADC[3];
+//static int16_t accADC[3];
+//
+//static t_fp_vector EstG;
+//
+//static float accLPF[3] = {0.0,0.0,0.0};
+//static float accMag = 0;
+//static bool disableAccGtest = false;
+//
+//static float AccComplFilterConst = 0;  // filter constant for complementary filter
+//
+//static int16_t acc_25deg = 25;      //** TODO: check
+//
+//static int32_t angle[2]    = {0,0};  // absolute angle inclination in multiple of 0.01 degree    180 deg = 18000
+//
+//static float angleOffsetRoll_f = 0;
+//static float angleOffsetPitch_f = 0;
+//
+//static int32_t angleOffsetRoll = 0;
+//static int32_t angleOffsetPitch = 0;
+//
+//
+//// DEBUG only
+//uint32_t stackTop = 0xffffffff;
+//uint32_t stackBottom = 0;
+//
+//uint32_t heapTop = 0;
+//uint32_t heapBottom = 0xffffffff;
 

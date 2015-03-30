@@ -94,43 +94,43 @@ float utilLP3_float(float * q, float i, float coeff) {
 
 
 
-/************************/
-/* Debugging            */
-/************************/
-
-inline void stackCheck() {
-  int localVar;  
-  // stack limits
-  if ((uint32_t)&localVar < stackTop) stackTop = (uint32_t)&localVar;
-  if ((uint32_t)&localVar > stackBottom) stackBottom = (uint32_t)&localVar;
-}
-
-inline void heapCheck() {
-  uint32_t * memPtr;
-  // heap limits
-  memPtr = (uint32_t *)malloc(8);
-  if ((uint32_t)memPtr > heapTop) heapTop = (uint32_t)memPtr;
-  if ((uint32_t)memPtr < heapBottom) heapBottom = (uint32_t)memPtr;
-  free(memPtr);
-}
-
-inline void stackHeapEval(bool doPrint) {
-
-  int diff = stackTop - heapTop;
-  if (diff < 64) {
-    Serial.println(F("WARNING: low memory < 64"));
-  }
-  if ((diff <64) || doPrint) {
-    Serial.print(F("free memory = ")); Serial.println(diff);
-    Serial.print(F("stackSize   = ")); Serial.println(stackBottom-stackTop);
-    Serial.print(F("stackBottom = 0x")); Serial.println(stackBottom, HEX);
-    Serial.print(F("stackTop    = 0x")); Serial.println(stackTop, HEX);
-    Serial.print(F("heapSize    = ")); Serial.println(heapTop-heapBottom);
-    Serial.print(F("heapTop     = 0x")); Serial.println(heapTop, HEX);
-    Serial.print(F("heapBottom  = 0x")); Serial.println(heapBottom, HEX);
-  }
-}
-
+///************************/
+///* Debugging            */
+///************************/
+//
+//inline void stackCheck() {
+//  int localVar;  
+//  // stack limits
+//  if ((uint32_t)&localVar < stackTop) stackTop = (uint32_t)&localVar;
+//  if ((uint32_t)&localVar > stackBottom) stackBottom = (uint32_t)&localVar;
+//}
+//
+//inline void heapCheck() {
+//  uint32_t * memPtr;
+//  // heap limits
+//  memPtr = (uint32_t *)malloc(8);
+//  if ((uint32_t)memPtr > heapTop) heapTop = (uint32_t)memPtr;
+//  if ((uint32_t)memPtr < heapBottom) heapBottom = (uint32_t)memPtr;
+//  free(memPtr);
+//}
+//
+//inline void stackHeapEval(bool doPrint) {
+//
+//  int diff = stackTop - heapTop;
+//  if (diff < 64) {
+//    Serial.println(F("WARNING: low memory < 64"));
+//  }
+//  if ((diff <64) || doPrint) {
+//    Serial.print(F("free memory = ")); Serial.println(diff);
+//    Serial.print(F("stackSize   = ")); Serial.println(stackBottom-stackTop);
+//    Serial.print(F("stackBottom = 0x")); Serial.println(stackBottom, HEX);
+//    Serial.print(F("stackTop    = 0x")); Serial.println(stackTop, HEX);
+//    Serial.print(F("heapSize    = ")); Serial.println(heapTop-heapBottom);
+//    Serial.print(F("heapTop     = 0x")); Serial.println(heapTop, HEX);
+//    Serial.print(F("heapBottom  = 0x")); Serial.println(heapBottom, HEX);
+//  }
+//}
+//
 
 /*
  * The width of the CRC calculation and result.

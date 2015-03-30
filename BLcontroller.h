@@ -86,6 +86,7 @@ OCRxB                                                                      Outpu
 
 
 */
+void calcSinusArray();
 void initBlController() 
 {
   pinMode(3, OUTPUT);
@@ -137,6 +138,7 @@ void initBlController()
   OCR1B = 0;  //D10 BPIN
   OCR0A = 0;  //D6
   OCR0B = 0;  //D5 
+  //calcSinusArray();
 }
 
  

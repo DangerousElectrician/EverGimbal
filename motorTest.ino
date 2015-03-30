@@ -133,16 +133,23 @@ void dmpDataReady() {
 
 
 //Define Variables we'll be connecting to
-double Setpoint, Input, Output;
+float Setpoint, Input, Output;
 
-//Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, 1, 0,0, DIRECT);
 
 // ================================================================
 // ===                      INITIAL SETUP                       ===
 // ================================================================
 
-void setup() {
+void setup() {    
+    // Init BL Controller
+    initBlController();
+    // Init Sinus Arrays
+    initMotorStuff();
+    // switch off PWM Power
+    motorPowerOff();
+    //calcSinusArray();
+  
+  
     // join I2C bus (I2Cdev library doesn't do this automatically)
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
@@ -212,18 +219,10 @@ void setup() {
 
     // configure LED for output
     pinMode(LED_PIN, OUTPUT);
-    
-    // Init BL Controller
-    initBlController();
-    // Init Sinus Arrays
-    initMotorStuff();
-    
-    // switch off PWM Power
-    motorPowerOff();
+
 
 }
 
-int pos = 0;
 int power = 150;
 
 
@@ -233,11 +232,7 @@ int power = 150;
 void loop() {
     // if programming failed, don't try to do anything
     if (!dmpReady) return;
-
-    // wait for MPU interrupt or extra packet(s) available
-    int yaw = euler[0] * 180/M_PI+92;
-    int pos = SERVOCENTER;    // variable to store the servo position
-    Setpoint = euler[0] * 180/M_PI;
+    int pos = 0;
     while (!mpuInterrupt && fifoCount < packetSize) {
         // other program behavior stuff here
         // .
@@ -249,18 +244,10 @@ void loop() {
         // .
         // .
         // .
-        Setpoint = 0;
-        Input = (euler[1] * 180/M_PI);
-        myPID.Compute();
-        pos=constrain( SERVOCENTER-Output, SERVOCENTER-40, SERVOCENTER+40);
-        //Serial.print(yaw);
-        //Serial.print("\t");
-        //Serial.println(pos);
-        myservo.write(pos);
-        
-        accelgyro.getRotation(&gx, &gy, &gz);
-        MoveMotorPosSpeed(1, pos>>7, power);
-        pos-=gz/10;//128;
+        Input = (euler[0] * 180/M_PI)*2.5;
+        pos = (int) Input;
+        MoveMotorPosSpeed(1, pos, power);
+        //Serial.println("mainloop");
 
     }
 
@@ -293,17 +280,17 @@ void loop() {
             // display Euler angles in degrees
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetEuler(euler, &q);
-            Serial.print("euler\t");
+            //Serial.print("euler\t");
             Serial.print(euler[0] * 180/M_PI);
             Serial.print("\t");
-            Serial.print(euler[1] * 180/M_PI);
+            //Serial.print(euler[1] * 180/M_PI);
+            //Serial.print("\t");
+            //Serial.print(euler[2] * 180/M_PI);
+            //Serial.print("\t");
+            Serial.print(Input);
             Serial.print("\t");
-            Serial.print(euler[2] * 180/M_PI);
+            Serial.println(pos);
             
-            Serial.print("\t");
-            Serial.print(pos);
-            Serial.print("\t");
-            Serial.println(Output);
         #endif
 
         #ifdef OUTPUT_READABLE_YAWPITCHROLL
