@@ -1,0 +1,1 @@
+A single axis gimbal meant to hold a single downward pointing camera in the same direction. Most existing gimbals can't handle continuous rotation. This code can. The camera needs to be self contained.
