@@ -41,7 +41,7 @@ THE SOFTWARE.
 ===============================================
 */
 
-
+#define MOTOR_POLES 7
 
 #include "BLcontroller.h"         // Motor Movement Functions and Timer Config
 
@@ -222,7 +222,7 @@ void setup() {
 }
 
 int power = 150;
-float scale = 256*6/(float)360; //something needs to be cast as float
+float scale = 256*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
 float Input = 0;
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
