@@ -222,7 +222,7 @@ void setup() {
 
 int16_t ax, ay, az;
 int power = 0;
-float scale = 10*256*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
+float scale = 255*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
 float Input = 0;
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
