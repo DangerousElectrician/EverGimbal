@@ -42,7 +42,13 @@ THE SOFTWARE.
 */
 
 #define MOTOR_POLES 4
+
+#define MOTOR_PIN_A 23
+#define MOTOR_PIN_B 22
+#define MOTOR_PIN_C 20
+
 #define SERIAL_PORT Serial1
+#define INT_PIN 15
 
 //#include "BLcontroller.h"         // Motor Movement Functions and Timer Config
 #include "TeensyBrushless.h"
@@ -140,6 +146,7 @@ void dmpDataReady() {
 // ================================================================
 
 void setup() {    
+    analogWriteFrequency(23,23437);
     // configure LED for output
     calcSinusArray();
 
@@ -195,8 +202,8 @@ void setup() {
 
         // enable Arduino interrupt detection
         //SERIAL_PORT.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
-        pinMode(20, INPUT);
-        attachInterrupt(20, dmpDataReady, RISING);
+        pinMode(INT_PIN, INPUT);
+        attachInterrupt(INT_PIN, dmpDataReady, RISING);
         mpuIntStatus = mpu.getIntStatus();
 
         // set our DMP Ready flag so the main loop() function knows it's okay to use it
@@ -221,9 +228,9 @@ void setup() {
 
 int16_t ax, ay, az;
 int power = 0;
-float scale = 256*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
+float scale = 255*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
 float Input = 0;
-TeensyBrushless Mot(23,22,21,90);
+TeensyBrushless Mot(MOTOR_PIN_A,MOTOR_PIN_B,MOTOR_PIN_C,255);
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
