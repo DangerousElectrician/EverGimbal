@@ -47,6 +47,8 @@ THE SOFTWARE.
 #define MOTOR_PIN_B 22
 #define MOTOR_PIN_C 20
 
+#define POWER 100
+
 #define SERIAL_PORT Serial1
 #define INT_PIN 15
 
@@ -230,7 +232,7 @@ int16_t ax, ay, az;
 int power = 0;
 float scale = 255*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
 float Input = 0;
-TeensyBrushless Mot(MOTOR_PIN_A,MOTOR_PIN_B,MOTOR_PIN_C,255);
+TeensyBrushless Mot(MOTOR_PIN_A,MOTOR_PIN_B,MOTOR_PIN_C,POWER);
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
