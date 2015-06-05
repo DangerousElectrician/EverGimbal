@@ -250,13 +250,22 @@ void loop() {
         if(Serial.available()) {
           switch(Serial.read()) {
             case 'a':              
-              Serial.println(ax);
+              {
+              float mag = sqrt(ax^2+ay^2+az^2);
+              Serial.print(mag);
+              Serial.print(",");
               //Serial.print("\n");
-              Serial.println(ay);
+              //Serial.print(ay);
+              //Serial.print(",");
               //Serial.print("\n");
-              Serial.println(az);
-              break;
+              //Serial.print(az);
+              //Serial.print(",");
               
+              Serial.print(acos(az/mag));
+              Serial.print(",");
+              Serial.println(atan(ay/az));
+              break;
+              }
             case 'd':
               power = 0;
               break;
