@@ -3,12 +3,14 @@
 #define MOTOR_PIN_A 23
 #define MOTOR_PIN_B 22
 #define MOTOR_PIN_C 20
-#define EN_PIN 21
+#define MOTOR_EN_PIN 21
 
 #define POWER 100
 
 #define SERIAL_PORT Serial1
 #define INT_PIN 15
+
+#define EN_PIN 16
 
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class using DMP (MotionApps v2.0)
 // 6/21/2012 by Jeff Rowberg <jeff@rowberg.net>
@@ -97,18 +99,6 @@ MPU6050 mpu;
    http://code.google.com/p/arduino/issues/detail?id=958
  * ========================================================================= */
 
-// uncomment "OUTPUT_READABLE_EULER" if you want to see Euler angles
-// (in degrees) calculated from the quaternions coming from the FIFO.
-// Note that Euler angles suffer from gimbal lock (for more info, see
-// http://en.wikipedia.org/wiki/Gimbal_lock)
-#define OUTPUT_READABLE_EULER
-
-// uncomment "OUTPUT_READABLE_YAWPITCHROLL" if you want to see the yaw/
-// pitch/roll angles (in degrees) calculated from the quaternions coming
-// from the FIFO. Note this also requires gravity vector calculations.
-// Also note that yaw/pitch/roll angles suffer from gimbal lock (for
-// more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
-//#define OUTPUT_READABLE_YAWPITCHROLL
 
 #define LED_PIN 13 // (Arduino is 13, Teensy is 11, Teensy++ is 6)
 bool blinkState = false;
@@ -153,6 +143,8 @@ void dmpDataReady() {
 
 void setup() {    
     analogWriteFrequency(23,23437);
+  
+    
     // configure LED for output
     calcSinusArray();
 
@@ -227,12 +219,12 @@ void setup() {
         //SERIAL_PORT.print(devStatus);
         //SERIAL_PORT.println(F(")"));
     }
-  
-    pinMode(LED_PIN, OUTPUT);
-    
-    pinMode(EN_PIN, OUTPUT);
-    digitalWrite(EN_PIN, true);
 
+    pinMode(LED_PIN, OUTPUT);
+    //pinMode(EN_PIN, INPUT_PULLUP);
+    
+    pinMode(MOTOR_EN_PIN, OUTPUT);
+    digitalWrite(MOTOR_EN_PIN, true);
 }
 
 int16_t ax, ay, az;
@@ -240,6 +232,7 @@ int power = 0;
 float scale = 255*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
 float Input = 0;
 TeensyBrushless Mot(MOTOR_PIN_A,MOTOR_PIN_B,MOTOR_PIN_C,POWER);
+//bool enabled = true;
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
@@ -248,17 +241,12 @@ void loop() {
     //if (!dmpReady) return;
     int pos = 0;
     while (!mpuInterrupt && fifoCount < packetSize) {
-        // other program behavior stuff here
-        // .
-        // .
-        // .
-        // if you are really paranoid you can frequently test in between other
-        // stuff to see if mpuInterrupt is true, and if so, "break;" from the
-        // while() loop to immediately process the MPU data
-        // .
-        // .
-        // .
-        //SERIAL_PORT.println("mainloop");
+
+        Input = ((euler[0] * 180/M_PI)+180)*scale;
+        pos = (int) (Input);
+        Mot.MoveMotorPosSpeed(pos);
+        Mot.updateMotor();
+      
         if(SERIAL_PORT.available()) {
           switch(SERIAL_PORT.read()) {
             case 'a':              
@@ -269,11 +257,11 @@ void loop() {
               
             case 'd':
               Mot.disable();
-              digitalWrite(EN_PIN, false);
+              digitalWrite(MOTOR_EN_PIN, false);
               break;
             case 'f':
               Mot.enable();
-              digitalWrite(EN_PIN, true);
+              digitalWrite(MOTOR_EN_PIN, true);
               break;
               
 //            case 'q':
@@ -290,13 +278,11 @@ void loop() {
 //              break;
           }
         }
+        
+        
 
     }
     
-        Input = ((euler[0] * 180/M_PI)+180)*scale;
-        pos = (int) (Input);
-        Mot.MoveMotorPosSpeed(pos);
-        Mot.updateMotor();
 
     
     
@@ -335,6 +321,27 @@ void loop() {
         // display Euler angles in degrees
         mpu.dmpGetQuaternion(&q, fifoBuffer);
         mpu.dmpGetEuler(euler, &q);
+        
+              
+//      if(!digitalRead(EN_PIN))
+//      {
+//        if(!enabled)
+//        {
+//          enabled=true;
+//          Mot.enable();
+//          digitalWrite(MOTOR_EN_PIN, true);
+//        }
+//      }
+//      else
+//      {
+//        if(enabled)
+//        {
+//          enabled = false;
+//          Mot.disable();
+//          digitalWrite(MOTOR_EN_PIN, false);
+//        }
+//      }
+        
         //SERIAL_PORT.print("euler\t");
         //SERIAL_PORT.print(euler[0] * 180/M_PI+180);
         //SERIAL_PORT.print("\t");
