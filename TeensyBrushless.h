@@ -18,7 +18,6 @@ class TeensyBrushless
   
   TeensyBrushless(uint8_t pin_a, uint8_t pin_b, uint8_t pin_c);
   
-  
   TeensyBrushless(uint8_t pin_a, uint8_t pin_b, uint8_t pin_c, uint16_t maxP);
   
   uint16_t maxPWM = 90;

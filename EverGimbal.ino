@@ -1,3 +1,15 @@
+#define MOTOR_POLES 4
+
+#define MOTOR_PIN_A 23
+#define MOTOR_PIN_B 22
+#define MOTOR_PIN_C 20
+#define EN_PIN 21
+
+#define POWER 100
+
+#define SERIAL_PORT Serial1
+#define INT_PIN 15
+
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class using DMP (MotionApps v2.0)
 // 6/21/2012 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
@@ -41,16 +53,8 @@ THE SOFTWARE.
 ===============================================
 */
 
-#define MOTOR_POLES 4
 
-#define MOTOR_PIN_A 23
-#define MOTOR_PIN_B 22
-#define MOTOR_PIN_C 20
 
-#define POWER 100
-
-#define SERIAL_PORT Serial1
-#define INT_PIN 15
 
 //#include "BLcontroller.h"         // Motor Movement Functions and Timer Config
 #include "TeensyBrushless.h"
@@ -225,6 +229,9 @@ void setup() {
     }
   
     pinMode(LED_PIN, OUTPUT);
+    
+    pinMode(EN_PIN, OUTPUT);
+    digitalWrite(EN_PIN, true);
 
 }
 
@@ -262,9 +269,11 @@ void loop() {
               
             case 'd':
               Mot.disable();
+              digitalWrite(EN_PIN, false);
               break;
             case 'f':
               Mot.enable();
+              digitalWrite(EN_PIN, true);
               break;
               
             case 'q':
