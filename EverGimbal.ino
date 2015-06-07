@@ -251,10 +251,6 @@ void loop() {
         // .
         // .
         // .
-        Input = ((euler[0] * 180/M_PI)+180)*scale;
-        pos = (int) (Input);
-        Mot.MoveMotorPosSpeed(pos);
-        Mot.updateMotor();
         //SERIAL_PORT.println("mainloop");
         if(SERIAL_PORT.available()) {
           switch(SERIAL_PORT.read()) {
@@ -287,6 +283,11 @@ void loop() {
         }
 
     }
+    
+        Input = ((euler[0] * 180/M_PI)+180)*scale;
+        pos = (int) (Input);
+        Mot.MoveMotorPosSpeed(pos);
+        Mot.updateMotor();
 
     
     
