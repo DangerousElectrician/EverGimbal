@@ -276,18 +276,18 @@ void loop() {
               digitalWrite(EN_PIN, true);
               break;
               
-            case 'q':
-              SERIAL_PORT.println("wait 2 sec");
-              delay(2000);
-              break;
-            case 'w':
-              for(int i = 0; i < 256*4; i++)
-              {
-                Mot.MoveMotorPosSpeed(i);
-                Mot.updateMotor();
-                delayMicroseconds(500);
-              }
-              break;
+//            case 'q':
+//              SERIAL_PORT.println("wait 2 sec");
+//              delay(2000);
+//              break;
+//            case 'w':
+//              for(int i = 0; i < 256*4; i++)
+//              {
+//                Mot.MoveMotorPosSpeed(i);
+//                Mot.updateMotor();
+//                delayMicroseconds(500);
+//              }
+//              break;
           }
         }
 
