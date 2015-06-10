@@ -221,7 +221,7 @@ void setup() {
     }
 
     pinMode(LED_PIN, OUTPUT);
-    //pinMode(EN_PIN, INPUT_PULLUP);
+    pinMode(EN_PIN, INPUT_PULLUP);
     
     pinMode(MOTOR_EN_PIN, OUTPUT);
     digitalWrite(MOTOR_EN_PIN, true);
@@ -232,7 +232,7 @@ int power = 0;
 float scale = 255*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
 float Input = 0;
 TeensyBrushless Mot(MOTOR_PIN_A,MOTOR_PIN_B,MOTOR_PIN_C,POWER);
-//bool enabled = true;
+bool enabled = true;
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
@@ -279,6 +279,25 @@ void loop() {
           }
         }
         
+      if(!digitalRead(EN_PIN))
+      {
+        if(!enabled)
+        {
+          enabled=true;
+          Mot.enable();
+          digitalWrite(MOTOR_EN_PIN, true);
+        }
+      }
+      else
+      {
+        if(enabled)
+        {
+          enabled = false;
+          Mot.disable();
+          digitalWrite(MOTOR_EN_PIN, false);
+        }
+      }
+        
         
 
     }
@@ -323,24 +342,7 @@ void loop() {
         mpu.dmpGetEuler(euler, &q);
         
               
-//      if(!digitalRead(EN_PIN))
-//      {
-//        if(!enabled)
-//        {
-//          enabled=true;
-//          Mot.enable();
-//          digitalWrite(MOTOR_EN_PIN, true);
-//        }
-//      }
-//      else
-//      {
-//        if(enabled)
-//        {
-//          enabled = false;
-//          Mot.disable();
-//          digitalWrite(MOTOR_EN_PIN, false);
-//        }
-//      }
+
         
         //SERIAL_PORT.print("euler\t");
         //SERIAL_PORT.print(euler[0] * 180/M_PI+180);
