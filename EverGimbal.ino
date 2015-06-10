@@ -12,6 +12,10 @@
 
 #define EN_PIN 16
 
+#define LED_PIN 13 // (Arduino is 13, Teensy is 11, Teensy++ is 6)
+
+#define START_ON_POWER
+
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class using DMP (MotionApps v2.0)
 // 6/21/2012 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
@@ -100,7 +104,6 @@ MPU6050 mpu;
  * ========================================================================= */
 
 
-#define LED_PIN 13 // (Arduino is 13, Teensy is 11, Teensy++ is 6)
 bool blinkState = false;
 
 // MPU control/status vars
@@ -232,7 +235,11 @@ int power = 0;
 float scale = 255*MOTOR_POLES/(float)360; //Had a few issues here when the math was being done as ints and then cast to float instead of doing the math in float
 float Input = 0;
 TeensyBrushless Mot(MOTOR_PIN_A,MOTOR_PIN_B,MOTOR_PIN_C,POWER);
-bool enabled = true;
+#ifdef START_ON_POWER
+  bool enabled = false;
+#else
+  bool enabled = true;
+#endif
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
